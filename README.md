@@ -274,7 +274,7 @@ To test Local File Inclusion, try:
 http://localhost/lfi_rfi_ctf.php?page=/etc/passwd
 ```
 
-✔ If successful, you'll see the `/etc/passwd` file!  
+ If successful, you'll see the `/etc/passwd` file!  
 
 ### Advanced LFI Techniques :
 - Use PHP Wrappers:  
