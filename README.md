@@ -92,7 +92,7 @@ gobuster dir -u http://target.com/ -w /usr/share/wordlists/dirb/common.txt -x ph
 
 ## 2️ Exploit LFI Using Burp Suite
 ###  Burp Suite to Test LFI Manually
-1. Open Burp Suite → Turn on **Intercept.
+1. Open Burp Suite → Turn on Intercept.
 2. Capture the request for `vulnerable.php?file=xyz`.
 3. Modify the parameter to test LFI:
    ```
